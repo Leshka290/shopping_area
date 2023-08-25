@@ -10,11 +10,13 @@
     </parent>
     <groupId>com.skyteam</groupId>
     <artifactId>shopping_area</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>ShoppingArea</name>
     <description>ShoppingArea</description>
     <properties>
         <java.version>11</java.version>
+        <org.springdoc.version>1.6.14</org.springdoc.version>
+        <io.swagger.core.v3.version>2.2.8</io.swagger.core.v3.version>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +42,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${io.swagger.core.v3.version}</version>
+        </dependency>
+        <dependency>
+
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${org.springdoc.version}</version>
         </dependency>
     </dependencies>
 
