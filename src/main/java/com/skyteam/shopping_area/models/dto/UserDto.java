@@ -1,4 +1,4 @@
-package com.skyteam.shopping_area.model.dto;
+package com.skyteam.shopping_area.models.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
