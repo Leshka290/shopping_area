@@ -1,4 +1,4 @@
-package com.skyteam.shopping_area.model;
+package com.skyteam.shopping_area.models;
 
 import lombok.Data;
 
