@@ -2,7 +2,6 @@ package com.skyteam.shopping_area.services.impl;
 
 import com.skyteam.shopping_area.repositories.UserRepository;
 import com.skyteam.shopping_area.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
