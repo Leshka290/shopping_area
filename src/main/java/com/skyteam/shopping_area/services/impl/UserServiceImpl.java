@@ -2,6 +2,7 @@ package com.skyteam.shopping_area.services.impl;
 
 import com.skyteam.shopping_area.dto.NewPasswordDto;
 import com.skyteam.shopping_area.dto.UserDto;
+import com.skyteam.shopping_area.exceptions.InvalidPasswordException;
 import com.skyteam.shopping_area.models.Image;
 import com.skyteam.shopping_area.models.User;
 import com.skyteam.shopping_area.repositories.UserRepository;
@@ -14,11 +15,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Реализует CRUD операции с пользователями класса User
+ *
+ *  @author leshka290
  */
 @Service
 @RequiredArgsConstructor
@@ -27,13 +31,31 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
 
     @Override
     public boolean setPassword(NewPasswordDto newPasswordDto) {
+        User user = findAuthUser();
 
-        return false;
+        if (!checkPassword(user, newPasswordDto.getCurrentPassword())) {
+            throw new InvalidPasswordException("Current password is not valid");
+        }
+        changeUserPassword(user, newPasswordDto.getNewPassword());
+        log.info("Password " + user.getUsername() + " updated");
+        return true;
+    }
+
+    @Override
+    public boolean checkPassword(User user, String oldPassword) {
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    @Override
+    public void changeUserPassword(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     @Override

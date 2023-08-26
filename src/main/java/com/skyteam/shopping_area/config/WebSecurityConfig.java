@@ -9,6 +9,12 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
+/**
+ * Класс конфигурации WebSecurity
+ *
+ * @author leshka290
+ */
 @Configuration
 public class WebSecurityConfig {
 
@@ -35,8 +41,8 @@ public class WebSecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                        authz
-                                .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                authz
+                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
 //                                .mvcMatchers("/ads/**", "/users/**").authenticated()
 
                 )

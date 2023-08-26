@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import java.io.IOException;
 
+
+/**
+ * Контроллер для работы с пользователями
+ *
+ * @author leshka290
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -34,10 +39,10 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(NewPasswordDto newPasswordDto) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
         log.info("Request update password");
-        //дописать метод
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok().body(userService.setPassword(newPasswordDto));
     }
 
     @Operation(summary = "Get info about authorize user")
@@ -73,7 +78,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestBody @NotBlank MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody @NotBlank MultipartFile image) {
         log.info("Update image by user");
         userService.updateUserImage(image);
         return ResponseEntity.ok().build();

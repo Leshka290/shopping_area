@@ -6,6 +6,12 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * Класс изображения пользователя для БД со свойствами:
+ * <p>id</p><p>image</p>
+ *
+ * @author leshka290
+ */
 @Getter
 @Setter
 @Entity
