@@ -1,11 +1,12 @@
 package com.skyteam.shopping_area.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
-@AllArgsConstructor
-public class UserNotFoundException extends RuntimeException{
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends RuntimeException {
 
-    private final Long id;
+    public UserNotFoundException(String message) {
+        super("User is not found");
+    }
 }
