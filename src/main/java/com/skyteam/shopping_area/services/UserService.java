@@ -15,6 +15,10 @@ public interface UserService {
 
     boolean setPassword(NewPasswordDto newPasswordDto);
 
+    boolean checkPassword(User user, String oldPassword);
+
+    void changeUserPassword(User user, String password);
+
     UserDto getUser(Authentication auth);
 
     UserDto updateUser(UserDto userDto);

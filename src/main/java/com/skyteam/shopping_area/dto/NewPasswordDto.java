@@ -6,6 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Класс DTO для нового пароля
+ * <p>currentPassword</p><p>newPassword</p>
+ *
+ * @author leshka290
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

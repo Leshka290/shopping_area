@@ -9,7 +9,8 @@ import javax.persistence.*;
 
 /**
  * Класс пользователя для БД со свойствами:
- * <p>id</p><p>firstName</p><p>lastName</p>
+ * <p>id</p><p>firstName</p><p>lastName</p><p>username</p><p>email</p><p>password</p>
+ * <p>phone</p><p>role</p><p>image</p>
  *
  * @author leshka290
  */
