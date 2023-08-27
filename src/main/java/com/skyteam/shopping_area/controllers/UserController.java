@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.logging.Logger;
 
 
@@ -84,7 +85,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestBody @NotBlank MultipartFile image) {
+    public ResponseEntity<Void> updateUserImage(@RequestBody @NotBlank MultipartFile image) throws IOException {
         log.info("Update image by user");
         userService.updateUserImage(image);
         return ResponseEntity.ok().build();
