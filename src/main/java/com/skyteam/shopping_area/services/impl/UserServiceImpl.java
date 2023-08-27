@@ -11,6 +11,7 @@ import com.skyteam.shopping_area.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Реализует CRUD операции с пользователями класса User
@@ -28,12 +32,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+    Logger log = (Logger) LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
+
+    public UserServiceImpl(UserRepository userRepository, ImageService imageService, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.imageService = imageService;
+        this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public boolean setPassword(NewPasswordDto newPasswordDto) {
@@ -74,15 +86,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile file) {
-        log.info("New avatar {}", file.getName());
+    public void updateUserImage(MultipartFile file) throws IOException {
+//        log.info("New avatar {}", file.getName());
         User user = findAuthUser();
         Image newImage;
 
         if (userRepository.findUserByUsername(user.getUsername()).get().getImage() == null) {
-            newImage = imageService.saveImage(file);
+            newImage = imageService.uploadImage(user.getId(), file);
         } else {
-            newImage = imageService.updateImage(file, user.getImage());
+            newImage = imageService.uploadImage(user.getId(), file);
         }
         user.setImage(newImage.getId());
         userRepository.save(user);

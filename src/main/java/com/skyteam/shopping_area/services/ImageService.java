@@ -3,11 +3,15 @@ package com.skyteam.shopping_area.services;
 import com.skyteam.shopping_area.models.Image;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Collection;
+
 public interface ImageService {
 
-    Image saveImage(MultipartFile image);
+    Image uploadImage(Long userId, MultipartFile imageFile) throws IOException;
 
-    byte[] getImage(Long id);
+    Image findImage(Long userId);
 
-    Image updateImage(MultipartFile image, String oldImage);
+    Collection<Image> findAll(Integer pageNumber, Integer pageSize);
 }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.util.logging.Logger;
 
 
 /**
@@ -30,9 +32,13 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-
+    Logger log = (Logger) LoggerFactory.getLogger(UserController.class);
     @Autowired
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @Operation(summary = "Update password")
     @ApiResponse(responseCode = "200", description = "OK")
