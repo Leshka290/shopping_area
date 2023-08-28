@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * Реализует CRUD операции с пользователями класса User
  *
- *  @author leshka290
+ * @author leshka290
  */
 @Service
 @RequiredArgsConstructor
