@@ -23,7 +23,6 @@ public class UserDto {
     private String firstName;
     @Schema(description = "ФИО", example = "Иванов")
     private String lastName;
-
     @Schema(description = "ФИО", example = "email@mail.ru")
     private String email;
     @Schema(description = "ФИО")
@@ -32,7 +31,6 @@ public class UserDto {
     private String city;
     @Schema(description = "Изображение")
     private String image;
-
     @Schema(description = "Дата регистрации")
     private String regDate;
 }
