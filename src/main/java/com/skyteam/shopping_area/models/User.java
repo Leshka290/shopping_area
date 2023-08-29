@@ -1,7 +1,7 @@
 package com.skyteam.shopping_area.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.skyteam.shopping_area.constants.Role;
+import com.skyteam.shopping_area.dto.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

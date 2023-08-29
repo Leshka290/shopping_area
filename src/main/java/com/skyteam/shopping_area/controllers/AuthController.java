@@ -1,7 +1,7 @@
 package com.skyteam.shopping_area.controllers;
 
-import com.skyteam.shopping_area.dto.Login;
-import com.skyteam.shopping_area.dto.Register;
+import com.skyteam.shopping_area.dto.LoginDto;
+import com.skyteam.shopping_area.dto.RegisterDto;
 import com.skyteam.shopping_area.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
+    public ResponseEntity<?> login(@RequestBody LoginDto login) {
         if (authService.login(login.getUsername(), login.getPassword())) {
             return ResponseEntity.ok().build();
         } else {
@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Register register) {
+    public ResponseEntity<?> register(@RequestBody RegisterDto register) {
         if (authService.register(register)) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {

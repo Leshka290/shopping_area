@@ -6,6 +6,8 @@ import com.skyteam.shopping_area.models.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 /**
  * Методы для работы с классом User
  *
@@ -23,7 +25,7 @@ public interface UserService {
 
     UserDto updateUser(UserDto userDto);
 
-    void updateUserImage(MultipartFile file);
+    void updateUserImage(MultipartFile file) throws IOException;
 
     User findAuthUser();
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Класс изображения пользователя для БД со свойствами:
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
+@Table(name = "images")
 public class Image {
 
     @Id

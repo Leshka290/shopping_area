@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 /**
  * Реализует CRUD операции с пользователями класса User
  *
@@ -74,7 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile file) {
+    public void updateUserImage(MultipartFile file) throws IOException {
         log.info("New avatar {}", file.getName());
         User user = findAuthUser();
         Image newImage;
