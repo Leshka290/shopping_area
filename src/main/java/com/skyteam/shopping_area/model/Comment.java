@@ -1,5 +1,6 @@
 package com.skyteam.shopping_area.model;
 
+import com.skyteam.shopping_area.model.Ads;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
