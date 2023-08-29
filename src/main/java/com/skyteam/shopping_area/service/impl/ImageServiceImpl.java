@@ -11,6 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * Реализует CRUD операции класса Image
+ *
+ * @author leshka290
+ */
+
 @Slf4j
 @Service
 @AllArgsConstructor
