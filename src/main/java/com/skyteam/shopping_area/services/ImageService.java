@@ -11,5 +11,5 @@ public interface ImageService {
 
     byte[] getImage(Long id);
 
-    Image updateImage(MultipartFile image, String oldImage) throws IOException;
+    Image updateImage(MultipartFile image, long oldImage) throws IOException;
 }

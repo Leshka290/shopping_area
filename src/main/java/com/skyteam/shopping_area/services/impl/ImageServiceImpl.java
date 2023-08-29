@@ -29,11 +29,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile newImage, String idImage) throws IOException {
+    public Image updateImage(MultipartFile newImage, long idImage) throws IOException {
         log.info("Current method is - updateImage");
 
-        Image image = imageRepository.findById(Long.valueOf(idImage)).orElseThrow(() -> new ImageNotFoundException("Image exception"));
-        image.setId(idImage);
+        Image image = imageRepository.findById(idImage).orElseThrow(() -> new ImageNotFoundException("Image exception"));
+        image.setId(String.valueOf(idImage));
         image.setImage(newImage.getBytes());
 
         return imageRepository.save(image);
