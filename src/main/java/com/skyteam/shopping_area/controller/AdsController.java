@@ -121,7 +121,7 @@ public class AdsController {
         return ResponseEntity.ok(commentService.addComment(adPk, commentDto));
     }
 
-    @Operation(summary = "deleteComment")
+    @Operation(summary = "deleteComments")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
@@ -134,7 +134,7 @@ public class AdsController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @Operation(summary = "updateComment")
+    @Operation(summary = "updateComments")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -146,5 +146,18 @@ public class AdsController {
                                                     @RequestBody CommentDto commentDto) {
         log.info("Update comment: {}", adPk);
         return ResponseEntity.ok(commentService.updateComments(adPk, id, commentDto));
+    }
+
+    @Operation(summary = "getComments")
+    @ApiResponse(responseCode = "200", description = "OK",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = CommentDto.class)))
+    @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @ApiResponse(responseCode = "403", description = "Forbidden")
+    @GetMapping("/{adPk}/comments/{id}")
+    public ResponseEntity<CommentDto> getComment(@PathVariable String adPk, @PathVariable int id) {
+        log.info("Get comment: {}", adPk);
+        return ResponseEntity.ok(commentService.getComments(adPk, id));
     }
 }

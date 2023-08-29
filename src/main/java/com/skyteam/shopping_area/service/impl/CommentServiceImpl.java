@@ -35,4 +35,10 @@ public class CommentServiceImpl implements CommentService {
         //реализовать метод
         return null;
     }
+
+    @Override
+    public CommentDto getComments(String adPk, int id) {
+        //реализовать метод
+        return null;
+    }
 }
