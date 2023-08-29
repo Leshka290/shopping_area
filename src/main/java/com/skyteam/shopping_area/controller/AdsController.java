@@ -102,7 +102,7 @@ public class AdsController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ResponseWrapperCommentDto[].class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @GetMapping("/{adPk}/comments")
+    @GetMapping("/{ad_pk}/comments")
     public ResponseEntity<ResponseWrapperCommentDto> getComments(@PathVariable String adPk) {
         log.info("Get comments ads id: {}", adPk);
         return ResponseEntity.ok().body(commentService.getComments(adPk));
@@ -114,7 +114,7 @@ public class AdsController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = CommentDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @PostMapping("/{adPk}/comments")
+    @PostMapping("/{ad_pk}/comments")
     public ResponseEntity<CommentDto> addComment(@PathVariable String adPk, @RequestBody CommentDto commentDto) {
         log.info("Add comments ads id: {}", adPk);
         return ResponseEntity.ok(commentService.addComment(adPk, commentDto));
@@ -124,7 +124,7 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
-    @DeleteMapping("/{adPk}/comments/{id}")
+    @DeleteMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable String adPk, @PathVariable int id) {
         log.info("Delete comment: {}", adPk);
         if (commentService.deleteComments(adPk, id)) {
@@ -140,7 +140,7 @@ public class AdsController {
                     schema = @Schema(implementation = CommentDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
-    @PatchMapping("/{adPk}/comments/{id}")
+    @PatchMapping("/{ad_pk}/comments/{id}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable String adPk, @PathVariable int id,
                                                     @RequestBody CommentDto commentDto) {
         log.info("Update comment: {}", adPk);
