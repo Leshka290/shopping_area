@@ -5,11 +5,11 @@ import com.skyteam.shopping_area.dto.ResponseWrapperCommentDto;
 
 public interface CommentService {
 
-    CommentDto addComment(String ad_pk, CommentDto commentDto);
+    CommentDto addComment(String adPk, CommentDto commentDto);
 
-    ResponseWrapperCommentDto getComments(String ad_pk);
+    ResponseWrapperCommentDto getComments(String adPk);
 
-    boolean deleteComments(String ad_pk, int id);
+    boolean deleteComments(String adPk, int id);
 
-    CommentDto updateComments(String ad_pk, int id, CommentDto commentDto);
+    CommentDto updateComments(String adPk, int id, CommentDto commentDto);
 }
