@@ -30,7 +30,7 @@ public class ImageController {
                     , schema = @Schema(type = "array", format = "byte"))),
                     @ApiResponse(responseCode = "404",
                             description = "Not Found")}, tags = "Image")
-    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    @PatchMapping(value = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<?> updateAdsImage(@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException {
         log.info("Update image ags id: {}", id);
         imageService.updateImage(imageFile, id);
