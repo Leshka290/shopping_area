@@ -1,6 +1,6 @@
 package com.skyteam.shopping_area.services.impl;
 
-import com.skyteam.shopping_area.dto.Register;
+import com.skyteam.shopping_area.dto.RegisterDto;
 import com.skyteam.shopping_area.services.AuthService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean register(Register register) {
+    public boolean register(RegisterDto register) {
         if (manager.userExists(register.getUsername())) {
             return false;
         }
