@@ -31,6 +31,7 @@ public class AdsController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ResponseWrapperAdsDto[].class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
+    @GetMapping(value = "/")
     public ResponseEntity<?> getAds() {
         log.info("Request GET ads");
         return ResponseEntity.ok().body(adsService.getAllAds());
