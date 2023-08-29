@@ -16,9 +16,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class WebSecurityConfig {
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
 
     private static final String[] AUTH_WHITELIST = {
