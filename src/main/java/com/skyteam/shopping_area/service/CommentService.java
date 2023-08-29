@@ -12,4 +12,6 @@ public interface CommentService {
     boolean deleteComments(String adPk, int id);
 
     CommentDto updateComments(String adPk, int id, CommentDto commentDto);
+
+    CommentDto getComments(String adPk, int id);
 }
