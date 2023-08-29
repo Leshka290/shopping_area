@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 /**
  * Класс объявление со свойствами:
  * <p>id</p><p>author</p><p>image</p><p>pk</p><p>price</p><p>title</p>
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class AdsDto {
 
     private long author;
-    private String image;
+    private Collection<String> image;
     private long pk;
     private int price;
     private String title;

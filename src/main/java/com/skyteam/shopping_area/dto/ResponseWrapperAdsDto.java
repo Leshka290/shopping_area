@@ -18,5 +18,5 @@ import java.util.Collection;
 public class ResponseWrapperAdsDto {
 
     private int count;
-    private Collection<AdsDto> result;
+    private Collection<AdsDto> results;
 }
