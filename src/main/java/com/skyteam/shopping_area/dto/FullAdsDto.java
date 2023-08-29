@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 /**
  * Класс с полным объявлением со свойствами:
  * <p>authorFirstName</p><p>authorLastName</p><p>description</p><p>email</p>
@@ -21,7 +23,7 @@ public class FullAdsDto {
     private String authorLastName;
     private String description;
     private String email;
-    private String image;
+    private Collection<String> image;
     private String phone;
     private long pk;
     private int price;

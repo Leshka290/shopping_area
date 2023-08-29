@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class CreateAdsDto {
 
     private String description;
-    private String price;
+    private int price;
     private String title;
 }
