@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByUsername(user.getUsername()).get().getImage() == null) {
             newImage = imageService.saveImage(file);
         } else {
-            newImage = imageService.updateImage(file, user.getImage());
+            newImage = imageService.updateImage(file, Long.parseLong(user.getImage()));
         }
         user.setImage(newImage.getId());
         userRepository.save(user);
