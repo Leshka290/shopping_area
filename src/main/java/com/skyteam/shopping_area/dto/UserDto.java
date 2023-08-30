@@ -1,37 +1,37 @@
 package com.skyteam.shopping_area.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
  * Класс пользователя со свойствами:
- * <p>id</p><p>firstName</p><p>lastName</p><p>email</p><p>phone</p><p>city</p><p>image</p><p>regDate</p>
+ * <p>id</p><p>firstName</p><p>lastName</p><p>email</p><p>phone</p><p>role</p><p>image</p>
  *
  * @author leshka290
  */
 @Data
-@Schema(description = "Пользователь")
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(name = "User")
 public class UserDto {
 
-    @Schema(description = "Идентификатор", accessMode = Schema.AccessMode.READ_ONLY)
-    @Id
-    private Long id;
-
-    @Schema(description = "ФИО", example = "Иван")
+    @Schema(description = "id пользователя")
+    private int id;
+    @Schema(description = "имя пользователя")
     private String firstName;
-    @Schema(description = "ФИО", example = "Иванов")
+    @Schema(description = "фамилия пользователя")
     private String lastName;
-    @Schema(description = "ФИО", example = "email@mail.ru")
+    @Schema(description = "логин пользователя")
     private String email;
-    @Schema(description = "ФИО")
+    @Schema(description = "телефон пользователя")
     private String phone;
-    @Schema(description = "ФИО")
-    private String city;
-    @Schema(description = "Изображение")
+    @Schema(description = "роль пользователя")
+    private Role role;
+    @Schema(description = "ссылка на аватар пользователя")
     private String image;
-    @Schema(description = "Дата регистрации")
-    private LocalDateTime regDate;
 }
