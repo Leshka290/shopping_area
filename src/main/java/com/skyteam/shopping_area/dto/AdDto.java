@@ -1,10 +1,9 @@
 package com.skyteam.shopping_area.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Collection;
 
 /**
  * Класс объявление со свойствами:
@@ -16,11 +15,17 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdsDto {
+@Schema(name = "Ad")
+public class AdDto {
 
+    @Schema(description = "id автора объявления")
     private int author;
+    @Schema(description = "ссылка на картинку объявления")
     private String image;
+    @Schema(description = "id объявления")
     private int pk;
+    @Schema(description = "цена объявления")
     private int price;
+    @Schema(description = "заголовок объявления")
     private String title;
 }

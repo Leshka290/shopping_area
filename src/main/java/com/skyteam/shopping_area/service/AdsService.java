@@ -1,8 +1,8 @@
 package com.skyteam.shopping_area.service;
 
-import com.skyteam.shopping_area.dto.AdsDto;
-import com.skyteam.shopping_area.dto.CreateAdsDto;
-import com.skyteam.shopping_area.dto.FullAdsDto;
+import com.skyteam.shopping_area.dto.AdDto;
+import com.skyteam.shopping_area.dto.CreateOrUpdateAdDto;
+import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,13 +10,13 @@ public interface AdsService {
 
     ResponseWrapperAdsDto getAllAds();
 
-    AdsDto addAds(CreateAdsDto properties, MultipartFile image);
+    AdDto addAds(CreateOrUpdateAdDto properties, MultipartFile image);
 
-    FullAdsDto getFullAds(int adsId);
+    ExtendedAdDto getFullAds(int adsId);
 
     void removeAdsDto(int adsId);
 
-    AdsDto updateAdsDto(int adsId, CreateAdsDto createAdsDto);
+    AdDto updateAdsDto(int adsId, CreateOrUpdateAdDto createAdsDto);
 
     ResponseWrapperAdsDto getAllAdsMe();
 

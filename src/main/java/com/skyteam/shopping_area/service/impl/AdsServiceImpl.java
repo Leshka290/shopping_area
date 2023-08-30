@@ -1,8 +1,8 @@
 package com.skyteam.shopping_area.service.impl;
 
-import com.skyteam.shopping_area.dto.AdsDto;
-import com.skyteam.shopping_area.dto.CreateAdsDto;
-import com.skyteam.shopping_area.dto.FullAdsDto;
+import com.skyteam.shopping_area.dto.AdDto;
+import com.skyteam.shopping_area.dto.CreateOrUpdateAdDto;
+import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import com.skyteam.shopping_area.repository.AdsRepository;
 import com.skyteam.shopping_area.service.AdsService;
@@ -34,14 +34,14 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto addAds(CreateAdsDto properties, MultipartFile image) {
+    public AdDto addAds(CreateOrUpdateAdDto properties, MultipartFile image) {
         log.info("Current method is - addAds");
         //реализовать метод
         return null;
     }
 
     @Override
-    public FullAdsDto getFullAds(int id) {
+    public ExtendedAdDto getFullAds(int id) {
         log.info("Current method is - getFullAds");
         //реализовать метод
         return null;
@@ -54,7 +54,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdsDto updateAdsDto(int id, CreateAdsDto createAdsDto) {
+    public AdDto updateAdsDto(int id, CreateOrUpdateAdDto createAdsDto) {
         log.info("Current method is - updateAdsDto");
         //реализовать метод
         return null;

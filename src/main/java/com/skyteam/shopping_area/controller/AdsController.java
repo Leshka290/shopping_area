@@ -41,11 +41,11 @@ public class AdsController {
     @ApiResponse(responseCode = "201", description = "Created",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = AdsDto.class))
+                    schema = @Schema(implementation = AdDto.class))
     )
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDto> addAds(@RequestPart CreateAdsDto properties, @RequestPart MultipartFile image) {
+    public ResponseEntity<AdDto> addAds(@RequestPart CreateOrUpdateAdDto properties, @RequestPart MultipartFile image) {
         log.info("New ads added {}", properties.getTitle());
         return ResponseEntity.ok(adsService.addAds(properties, image));
     }
@@ -54,10 +54,10 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = FullAdsDto.class)))
+                    schema = @Schema(implementation = ExtendedAdDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @GetMapping("/{id}")
-    public ResponseEntity<FullAdsDto> getAds(@PathVariable int id) {
+    public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
@@ -76,11 +76,11 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = AdsDto.class)))
+                    schema = @Schema(implementation = AdDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @PatchMapping("/{id}")
-    public ResponseEntity<AdsDto> updateAds(@PathVariable int id, @RequestBody CreateAdsDto createAdsDto) {
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto createAdsDto) {
         log.info("Update ads id: {}", id);
         return ResponseEntity.ok(adsService.updateAdsDto(id, createAdsDto));
     }

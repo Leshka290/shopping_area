@@ -1,5 +1,6 @@
 package com.skyteam.shopping_area.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,10 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(name = "Ads")
 public class ResponseWrapperAdsDto {
 
+    @Schema(description = "общее количество объявлений")
     private int count;
-    private Collection<AdsDto> results;
+    private Collection<AdDto> results;
 }
