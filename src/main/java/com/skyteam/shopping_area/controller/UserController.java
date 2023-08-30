@@ -32,7 +32,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "Update password")
+    @Operation(summary = "Обновление пароля")
     @ApiResponse(responseCode = "200", description = "OK")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.setPassword(newPasswordDto));
     }
 
-    @Operation(summary = "Get info about authorize user")
+    @Operation(summary = "Получение информации об авторизованном пользователе")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(auth));
     }
 
-    @Operation(summary = "Update info authorize user")
+    @Operation(summary = "Обновление информации об авторизованном пользователе")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok().body(userDto);
     }
 
-    @Operation(summary = "Update image authorize user")
+    @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,

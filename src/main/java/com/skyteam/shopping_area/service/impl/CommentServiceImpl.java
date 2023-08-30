@@ -18,31 +18,25 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
 
     @Override
-    public CommentDto addComment(String adPk, CommentDto commentDto) {
+    public CommentDto addComment(int id, CommentDto commentDto) {
         //реализовать метод
         return null;
     }
 
     @Override
-    public ResponseWrapperCommentDto getComments(String adPk) {
+    public ResponseWrapperCommentDto getComments(int id) {
         //реализовать метод
         return null;
     }
 
     @Override
-    public boolean deleteComments(String adPk, int id) {
+    public boolean deleteComments(int adId, int commentId) {
         //реализовать метод
         return false;
     }
 
     @Override
-    public CommentDto updateComments(String adPk, int id, CommentDto commentDto) {
-        //реализовать метод
-        return null;
-    }
-
-    @Override
-    public CommentDto getComments(String adPk, int id) {
+    public CommentDto updateComments(int adId, int commentId, CommentDto commentDto) {
         //реализовать метод
         return null;
     }
