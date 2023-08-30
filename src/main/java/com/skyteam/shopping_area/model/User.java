@@ -33,6 +33,7 @@ public class User {
     private String lastName;
     private String phone;
 
+    @Enumerated
     private Role role;
     private String image;
 

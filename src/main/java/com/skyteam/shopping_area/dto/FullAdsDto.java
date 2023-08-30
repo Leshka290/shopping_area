@@ -23,9 +23,9 @@ public class FullAdsDto {
     private String authorLastName;
     private String description;
     private String email;
-    private Collection<String> image;
+    private String image;
     private String phone;
-    private long pk;
+    private int pk;
     private int price;
     private String title;
 }

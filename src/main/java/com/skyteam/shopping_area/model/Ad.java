@@ -21,7 +21,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(name = "ads")
-public class Ads {
+public class Ad {
 
     @Transient
     public static final String SEQUENCE_NAME = "ads_sequence";
@@ -32,7 +32,7 @@ public class Ads {
     @ManyToOne
     private User author;
 
-    @ManyToOne
+    @OneToOne
     private Image image;
     private int price;
     private String title;
