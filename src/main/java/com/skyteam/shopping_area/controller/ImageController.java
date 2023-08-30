@@ -19,19 +19,19 @@ import java.io.IOException;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/image")
+@RequestMapping("ads/image")
 public class ImageController {
 
     private final ImageService imageService;
 
-    @Operation(summary = "updateAdsImage", operationId = "updateAdsImage",
+    @Operation(summary = "updateAdsImage", operationId = "updateImage",
             responses = {@ApiResponse(responseCode = "200", description = "OK"
                     , content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE
                     , schema = @Schema(type = "array", format = "byte"))),
                     @ApiResponse(responseCode = "404",
                             description = "Not Found")}, tags = "Image")
-    @PatchMapping(value = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<?> updateAdsImage(@PathVariable long id, @RequestParam MultipartFile imageFile) throws IOException {
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateAdsImage(@PathVariable int id, @RequestParam MultipartFile imageFile) throws IOException {
         log.info("Update image ags id: {}", id);
         imageService.updateImage(imageFile, id);
         return ResponseEntity.status(HttpStatus.OK).build();

@@ -7,6 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * Реализует CRUD операции класса Comment
+ *
+ * @author leshka290
+ */
 @Service
 @Slf4j
 @AllArgsConstructor

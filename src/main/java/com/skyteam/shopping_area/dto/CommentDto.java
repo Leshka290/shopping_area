@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentDto {
 
-    private long author;
+    private int author;
     private String createdAt;
-    private long pk;
+    private int pk;
     private String text;
 }

@@ -9,14 +9,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 
 
@@ -32,7 +30,6 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
 
     @Operation(summary = "Update password")
@@ -79,7 +76,7 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestBody @NotBlank MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws IOException {
         log.info("Update image by user");
         userService.updateUserImage(image);
         return ResponseEntity.ok().build();

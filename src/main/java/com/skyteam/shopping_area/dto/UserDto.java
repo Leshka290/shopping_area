@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 /**
  * Класс пользователя со свойствами:
@@ -32,5 +33,5 @@ public class UserDto {
     @Schema(description = "Изображение")
     private String image;
     @Schema(description = "Дата регистрации")
-    private String regDate;
+    private LocalDateTime regDate;
 }

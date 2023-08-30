@@ -18,9 +18,9 @@ import java.util.Collection;
 @AllArgsConstructor
 public class AdsDto {
 
-    private long author;
-    private Collection<String> image;
-    private long pk;
+    private int author;
+    private String image;
+    private int pk;
     private int price;
     private String title;
 }
