@@ -19,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDto addComment(int id, CommentDto commentDto) {
-        //реализовать метод
+
         return null;
     }
 

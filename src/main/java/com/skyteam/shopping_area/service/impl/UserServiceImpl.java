@@ -64,9 +64,8 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(Authentication auth) {
         User user = userRepository.findUserByUsername(auth.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
-        UserDto userDto = modelMapper.map(user, UserDto.class);
 
-        return userDto;
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
