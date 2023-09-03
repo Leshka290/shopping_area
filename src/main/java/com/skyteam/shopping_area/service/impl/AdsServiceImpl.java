@@ -63,13 +63,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ExtendedAdDto getFullAds(long id) {
+    public ExtendedAdDto getFullAds(int id) {
         log.info("Current method is - getFullAds");
         return null;
     }
 
     @Override
-    public void removeAdsDto(long id) {
+    public void removeAdsDto(int id) {
         log.info("Current method is - removeAdsDto");
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isPresent()) {
@@ -80,7 +80,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDto updateAdsDto(long id, CreateOrUpdateAdDto properties) {
+    public AdDto updateAdsDto(int id, CreateOrUpdateAdDto properties) {
         log.info("Current method is - updateAdsDto");
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isPresent()) {

@@ -35,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile newImage, long idImage) throws IOException {
+    public Image updateImage(MultipartFile newImage, int idImage) throws IOException {
         log.info("Current method is - updateImage");
 
         Image image = imageRepository.findById(idImage).orElseThrow(() -> new ImageNotFoundException("Image exception"));
@@ -46,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] getImage(Long id) {
+    public byte[] getImage(int id) {
         log.info("Current method is - getImage");
 
         Image image = imageRepository.findById(id).orElseThrow(() ->

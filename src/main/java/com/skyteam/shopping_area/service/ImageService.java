@@ -9,7 +9,7 @@ public interface ImageService {
 
     Image saveImage(MultipartFile image) throws IOException;
 
-    byte[] getImage(Long id);
+    byte[] getImage(int id);
 
-    Image updateImage(MultipartFile image, long oldImage) throws IOException;
+    Image updateImage(MultipartFile image, int oldImage) throws IOException;
 }
