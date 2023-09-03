@@ -22,7 +22,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String username;
     private String email;
@@ -37,7 +37,7 @@ public class User {
     private Role role;
     private String image;
 
-    public User(long id, String username, String email, String password,
+    public User(int id, String username, String email, String password,
                 Role role) {
         this.id = id;
         this.username = username;

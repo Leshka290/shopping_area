@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface AdsRepository extends JpaRepository<Ad, Long> {
+public interface AdsRepository extends JpaRepository<Ad, Integer> {
     default void delete(Optional<Ad> byId) {}
 
 

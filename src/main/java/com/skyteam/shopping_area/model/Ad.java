@@ -27,7 +27,7 @@ public class Ad {
     public static final String SEQUENCE_NAME = "ads_sequence";
 
     @Id
-    private long id;
+    private int id;
 
     @ManyToOne
     private User author;

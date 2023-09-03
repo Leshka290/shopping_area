@@ -10,6 +10,7 @@ import com.skyteam.shopping_area.repository.CommentRepository;
 import com.skyteam.shopping_area.repository.UserRepository;
 import com.skyteam.shopping_area.service.CommentService;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,7 +60,6 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(CommentNotFoundException::new);
 
         commentRepository.delete(comment);
-        commentRepository.deleteAdsComment(adId, commentId);
         return !commentRepository.existsById(comment.getId());
     }
 

@@ -12,11 +12,11 @@ public interface AdsService {
 
     AdDto addAds(CreateOrUpdateAdDto properties, MultipartFile image);
 
-    ExtendedAdDto getFullAds(long adsId);
+    ExtendedAdDto getFullAds(int adsId);
 
-    void removeAdsDto(long adsId);
+    void removeAdsDto(int adsId);
 
-    AdDto updateAdsDto(long adsId, CreateOrUpdateAdDto createAdsDto);
+    AdDto updateAdsDto(int adsId, CreateOrUpdateAdDto createAdsDto);
 
     ResponseWrapperAdsDto getAllAdsMe();
 
