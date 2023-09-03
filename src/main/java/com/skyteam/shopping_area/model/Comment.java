@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
-    private long id;
+    private int id;
     private String text;
 
     @ManyToOne
