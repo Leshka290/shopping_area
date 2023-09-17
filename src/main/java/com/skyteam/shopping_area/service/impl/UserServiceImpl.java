@@ -1,6 +1,7 @@
 package com.skyteam.shopping_area.service.impl;
 
 import com.skyteam.shopping_area.dto.NewPasswordDto;
+import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.exception.InvalidPasswordException;
 import com.skyteam.shopping_area.model.Image;
@@ -62,16 +63,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(Authentication auth) {
-        User user = userRepository.findUserByUsername(auth.getName()).orElseThrow(() ->
+        User user = userRepository.findUserByEmailIgnoreCase(auth.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
 
         return modelMapper.map(user, UserDto.class);
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        userRepository.save(modelMapper.map(userDto, User.class));
-        return userDto;
+    public UpdateUserDto updateUser(UpdateUserDto userDto) {
+        User user = findAuthUser();
+        log.info(user.getUsername());
+        if (userDto.getFirstName() != null && !userDto.getFirstName().isBlank()) {
+            user.setFirstName(userDto.getFirstName());
+        }
+        if (userDto.getLastName() != null && !userDto.getLastName().isBlank()) {
+            user.setLastName(userDto.getLastName());
+        }
+        if (userDto.getPhone() != null && !userDto.getPhone().isBlank()) {
+            user.setPhone(userDto.getPhone());
+        }
+        log.info(user.getUsername());
+        return modelMapper.map(userRepository.save(user), UpdateUserDto.class);
     }
 
     @Override
@@ -80,7 +92,7 @@ public class UserServiceImpl implements UserService {
         User user = findAuthUser();
         Image newImage;
 
-        if (userRepository.findUserByUsername(user.getUsername()).get().getImage() == null) {
+        if (userRepository.findUserByEmailIgnoreCase(user.getUsername()).get().getImage() == null) {
             newImage = imageService.saveImage(file);
         } else {
             newImage = imageService.updateImage(file, Integer.parseInt(user.getImage()));
@@ -101,7 +113,7 @@ public class UserServiceImpl implements UserService {
         } else {
             username = user.toString();
         }
-        return userRepository.findUserByUsername(username).orElseThrow(() ->
+        return userRepository.findUserByEmailIgnoreCase(username).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
     }
 }

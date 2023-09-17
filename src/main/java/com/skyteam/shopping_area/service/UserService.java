@@ -1,6 +1,7 @@
 package com.skyteam.shopping_area.service;
 
 import com.skyteam.shopping_area.dto.NewPasswordDto;
+import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.model.User;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ public interface UserService {
 
     UserDto getUser(Authentication auth);
 
-    UserDto updateUser(UserDto userDto);
+    UpdateUserDto updateUser(UpdateUserDto userDto);
 
     void updateUserImage(MultipartFile file) throws IOException;
 

@@ -6,10 +6,10 @@ import com.skyteam.shopping_area.exception.IncorrectUsernameException;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.UserRepository;
 import com.skyteam.shopping_area.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,48 +19,30 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final UserDetailsManagerCustom manager;
     private final PasswordEncoder encoder;
 
     private final UserRepository userRepository;
 
-    public AuthServiceImpl(UserDetailsManager manager,
-                           PasswordEncoder passwordEncoder, UserRepository userRepository) {
-        this.manager = manager;
-        this.encoder = passwordEncoder;
-        this.userRepository = userRepository;
-    }
-
     @Override
     public boolean login(String userName, String password) {
-        if (!manager.userExists(userName)) {
-            return false;
-        }
         UserDetails userDetails = manager.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
     public boolean register(RegisterDto register) {
-        if (manager.userExists(register.getUsername())) {
-            return false;
-        }
-        manager.createUser(
-                org.springframework.security.core.userdetails.User.builder()
-                        .passwordEncoder(this.encoder::encode)
-                        .password(register.getPassword())
-                        .username(register.getUsername())
-                        .roles(register.getRole().name())
-                        .build());
         createUser(register);
+        log.info("Зарегистрирован новый пользователь: " + register.getUsername());
         return true;
     }
 
     private void createUser(RegisterDto register) {
-        if (userRepository.findUserByEmail(register.getUsername()).isPresent()) {
+        if (userRepository.findUserByEmailIgnoreCase(register.getUsername()).isPresent()) {
             throw new IncorrectUsernameException();
         }
 

@@ -22,6 +22,6 @@ public class UpdateUserDto {
     private String firstName;
     @Schema(description = "фамилия пользователя", maxLength = 10, minLength = 3)
     private String lastName;
-    @Schema(description = "телефон пользователя", pattern = "\\+7\\s?\\(?\\d{3}\\)?\\s?\\d{3}-?\\d{2}-?\\d{2}")
+    @Schema(description = "телефон пользователя", pattern = "\\+7\\s?\\d{3}\\s?\\d{3}-?\\d{2}-?\\d{2}")
     private String phone;
 }
