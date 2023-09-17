@@ -1,6 +1,7 @@
 package com.skyteam.shopping_area.controller;
 
 import com.skyteam.shopping_area.dto.NewPasswordDto;
+import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,11 +60,11 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = UserDto.class)))
-    @ApiResponse(responseCode = "204", description = "No Content")
+                    schema = @Schema(implementation = UpdateUserDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping("/me")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto userDto) {
+        log.info("Update info user");
         userService.updateUser(userDto);
         return ResponseEntity.ok().body(userDto);
     }
@@ -71,8 +72,7 @@ public class UserController {
     @Operation(summary = "Обновление аватара авторизованного пользователя")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
-                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = UserDto.class)))
+                    mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

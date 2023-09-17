@@ -10,7 +10,6 @@ import com.skyteam.shopping_area.repository.CommentRepository;
 import com.skyteam.shopping_area.repository.UserRepository;
 import com.skyteam.shopping_area.service.CommentService;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto addComment(int id, CommentDto commentDto) {
 
-        User user = userRepository.findUserByEmail(SecurityContextHolder.getContext()
+        User user = userRepository.findUserByEmailIgnoreCase(SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName()).orElseThrow();
 
