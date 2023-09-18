@@ -2,16 +2,19 @@ package com.skyteam.shopping_area.service.impl;
 
 import com.skyteam.shopping_area.dto.CommentDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperCommentDto;
+import com.skyteam.shopping_area.exception.AdNotFoundException;
 import com.skyteam.shopping_area.exception.CommentNotFoundException;
 import com.skyteam.shopping_area.model.Comment;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.AdsRepository;
 import com.skyteam.shopping_area.repository.CommentRepository;
 import com.skyteam.shopping_area.repository.UserRepository;
+import com.skyteam.shopping_area.service.CheckRoleUserService;
 import com.skyteam.shopping_area.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +34,7 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
     private final AdsRepository adsRepository;
     private final ModelMapper modelMapper;
+    private final CheckRoleUserService checkRoleUserService;
 
     @Override
     public CommentDto addComment(int id, CommentDto commentDto) {
@@ -54,22 +58,34 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public boolean deleteComments(int adId, int commentId) {
+    public boolean deleteComments(int adId, int commentId, Authentication auth) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
-
-        commentRepository.delete(comment);
-        return !commentRepository.existsById(comment.getId());
+        User commentOwner = comment.getAuthor();
+        if (checkRoleUserService.isUserOrAdmin(auth.getName(), commentOwner)) {
+            if (comment.getAds().getId() != adId) {
+                throw new AdNotFoundException();
+            }
+            commentRepository.delete(comment);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public CommentDto updateComments(int adId, int commentId, CommentDto commentDto) {
+    public CommentDto updateComments(int adId, int commentId, CommentDto commentDto, Authentication auth) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(CommentNotFoundException::new);
-
-        comment.setText(comment.getText());
-        adsRepository.save(comment.getAds());
-
-        return modelMapper.map(commentRepository.save(comment), CommentDto.class);
+        User commentOwner = comment.getAuthor();
+        if (checkRoleUserService.isUserOrAdmin(auth.getName(), commentOwner)) {
+            if (comment.getAds().getId() != adId) {
+                throw new AdNotFoundException();
+            }
+            comment.setText(commentDto.getText());
+            commentRepository.save(comment);
+            adsRepository.save(comment.getAds());
+            return modelMapper.map(comment, CommentDto.class);
+        }
+        return commentDto;
     }
 }

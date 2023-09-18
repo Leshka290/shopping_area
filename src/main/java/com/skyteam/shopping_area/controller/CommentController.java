@@ -12,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -52,9 +55,10 @@ public class CommentController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable int adId, @PathVariable int commentId,
+                                           @NotNull Authentication auth) {
         log.info("Delete comment: {}", adId);
-        if (commentService.deleteComments(adId, commentId)) {
+        if (commentService.deleteComments(adId, commentId, auth)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -69,8 +73,9 @@ public class CommentController {
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId, @PathVariable int commentId,
-                                                    @RequestBody CommentDto commentDto) {
+                                                    @RequestBody CommentDto commentDto,
+                                                    @NotNull Authentication auth) {
         log.info("Update comment: {}", adId);
-        return ResponseEntity.ok(commentService.updateComments(adId, commentId, commentDto));
+        return ResponseEntity.ok(commentService.updateComments(adId, commentId, commentDto, auth));
     }
 }

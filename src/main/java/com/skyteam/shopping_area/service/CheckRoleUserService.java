@@ -18,4 +18,12 @@ public interface CheckRoleUserService {
      * @param email e-mail администратора
      */
     boolean isAdmin(String email);
+
+    /**
+     * Проверяет, является ли пользователь владельцем объявления / комментария или администратором
+     *
+     * @param email e-mail пользователя / администратора
+     * @param owner владелец объявления / комментария
+     */
+    boolean isUserOrAdmin(String email, User owner);
 }
