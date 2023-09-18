@@ -6,10 +6,15 @@ import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import com.skyteam.shopping_area.exception.AdNotFoundException;
 import com.skyteam.shopping_area.exception.ImageNotFoundException;
+import com.skyteam.shopping_area.exception.UserNotFoundException;
 import com.skyteam.shopping_area.model.Ad;
+import com.skyteam.shopping_area.model.Image;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.AdsRepository;
+import com.skyteam.shopping_area.repository.UserRepository;
 import com.skyteam.shopping_area.service.AdsService;
+import com.skyteam.shopping_area.service.CheckRoleUserService;
+import com.skyteam.shopping_area.service.ImageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -35,8 +40,10 @@ import java.util.Optional;
 public class AdsServiceImpl implements AdsService {
 
     private final AdsRepository adsRepository;
-
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final CheckRoleUserService checkRoleUserService;
+    private final ImageService imageService;
 
     @Override
     public ResponseWrapperAdsDto getAllAds() {
@@ -45,18 +52,20 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDto addAds(CreateOrUpdateAdDto properties, MultipartFile image) {
+    public AdDto addAds(CreateOrUpdateAdDto properties, MultipartFile imageFile, String email) {
         log.info("Current method is - addAds");
-        if (image != null) {
-            AdDto newAd = new AdDto();
-            newAd.setAuthor(properties.getAuthorId());
-            newAd.setImage(String.valueOf(image));
-            newAd.setPrice(properties.getPrice());
-            newAd.setTitle(properties.getTitle());
-            Ad modelAd = modelMapper.map(newAd, Ad.class);
-            adsRepository.save(modelAd);
-            newAd.setPk(modelAd.getId());
-            return newAd;
+        Ad saveAd = modelMapper.map(properties, Ad.class);
+        saveAd.setAuthor(userRepository.findUserByEmail(email).orElseThrow(UserNotFoundException::new));
+        Image image;
+        if (imageFile != null) {
+            try {
+                image = imageService.saveImage(imageFile);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            saveAd.setImage(image);
+            adsRepository.save(saveAd);
+            return modelMapper.map(saveAd, AdDto.class);
         } else {
             throw new ImageNotFoundException("Картинка не найдена");
         }
@@ -64,15 +73,19 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public ExtendedAdDto getFullAds(int id) {
-        log.info("Current method is - getFullAds");
-        return null;
+        Ad ad = adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
+        log.info(String.valueOf(ad));
+        return modelMapper.map(ad, ExtendedAdDto.class);
     }
 
     @Override
-    public void removeAdsDto(int id) {
+    public void removeAdDto(String email, int id) {
         log.info("Current method is - removeAdsDto");
         Optional<Ad> optionalAd = adsRepository.findById(id);
-        if (optionalAd.isPresent()) {
+
+        Ad ad = adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
+        User adOwner = ad.getAuthor();
+        if (checkRoleUserService.isUserOrAdmin(email, adOwner ) && optionalAd.isPresent()) {
             adsRepository.deleteById(id);
         } else {
             throw new AdNotFoundException("Объявление не найдено");
@@ -80,26 +93,25 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public AdDto updateAdsDto(int id, CreateOrUpdateAdDto properties) {
+    public AdDto updateAdDto(int id, CreateOrUpdateAdDto properties, String email) {
         log.info("Current method is - updateAdsDto");
         Optional<Ad> optionalAd = adsRepository.findById(id);
         if (optionalAd.isPresent()) {
             Ad existingAd = optionalAd.get();
-            existingAd.setTitle(properties.getTitle());
-            existingAd.setPrice(properties.getPrice());
-            Ad ad = adsRepository.save(existingAd);
-            AdDto adDto = new AdDto();
-            adDto.setPk(ad.getId());
-            adDto.setTitle(ad.getTitle());
-            adDto.setPrice(ad.getPrice());
-            return adDto;
-        } else {
+            User adOwner = existingAd.getAuthor();
+            if (checkRoleUserService.isUserOrAdmin(email, adOwner)) {
+                existingAd.setTitle(properties.getTitle());
+                existingAd.setPrice(properties.getPrice());
+                return modelMapper.map(adsRepository.save(existingAd), AdDto.class);
+            }
+        }else {
             throw new AdNotFoundException("Объявление не найдено");
         }
+        return null;
     }
 
     @Override
-    public ResponseWrapperAdsDto getAllAdsMe() {
+    public ResponseWrapperAdsDto getAllAdsMe(Authentication auth) {
         log.info("Current method is - getAllAdsMe");
         ResponseWrapperAdsDto responseWrapperAdsDto = new ResponseWrapperAdsDto();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

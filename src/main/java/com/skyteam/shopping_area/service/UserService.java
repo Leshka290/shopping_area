@@ -16,17 +16,12 @@ import java.io.IOException;
  */
 public interface UserService {
 
-    boolean setPassword(NewPasswordDto newPasswordDto);
-
-    boolean checkPassword(User user, String oldPassword);
-
-    void changeUserPassword(User user, String password);
+    boolean setPassword(NewPasswordDto newPasswordDto, Authentication auth);
 
     UserDto getUser(Authentication auth);
 
-    UpdateUserDto updateUser(UpdateUserDto userDto);
+    UpdateUserDto updateUser(UpdateUserDto userDto, Authentication auth);
 
-    void updateUserImage(MultipartFile file) throws IOException;
+    void updateUserImage(MultipartFile file, Authentication auth) throws IOException;
 
-    User findAuthUser();
 }

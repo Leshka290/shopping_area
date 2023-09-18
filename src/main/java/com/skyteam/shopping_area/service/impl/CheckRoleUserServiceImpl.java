@@ -38,4 +38,9 @@ public class CheckRoleUserServiceImpl implements CheckRoleUserService {
             return false;
         }
     }
+
+    @Override
+    public boolean isUserOrAdmin(String email, User ownerAds) {
+        return isUser(email, ownerAds) || isAdmin(email);
+    }
 }

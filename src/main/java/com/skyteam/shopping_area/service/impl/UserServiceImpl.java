@@ -4,6 +4,7 @@ import com.skyteam.shopping_area.dto.NewPasswordDto;
 import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.exception.InvalidPasswordException;
+import com.skyteam.shopping_area.exception.UserNotFoundException;
 import com.skyteam.shopping_area.model.Image;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.UserRepository;
@@ -13,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,8 +38,10 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public boolean setPassword(NewPasswordDto newPasswordDto) {
-        User user = findAuthUser();
+    public boolean setPassword(NewPasswordDto newPasswordDto, Authentication auth) {
+        User user = userRepository
+                .findUserByEmailIgnoreCase(auth.getName())
+                .orElseThrow(UserNotFoundException::new);
 
         if (!checkPassword(user, newPasswordDto.getCurrentPassword())) {
             throw new InvalidPasswordException("Current password is not valid");
@@ -50,13 +51,11 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    @Override
-    public boolean checkPassword(User user, String oldPassword) {
+    private boolean checkPassword(User user, String oldPassword) {
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 
-    @Override
-    public void changeUserPassword(User user, String password) {
+    private void changeUserPassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
@@ -70,8 +69,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdateUserDto updateUser(UpdateUserDto userDto) {
-        User user = findAuthUser();
+    public UpdateUserDto updateUser(UpdateUserDto userDto, Authentication auth) {
+        User user = userRepository
+                .findUserByEmail(auth.getName())
+                .orElseThrow(UserNotFoundException::new);
+
         log.info(user.getUsername());
         if (userDto.getFirstName() != null && !userDto.getFirstName().isBlank()) {
             user.setFirstName(userDto.getFirstName());
@@ -87,33 +89,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile file) throws IOException {
+    public void updateUserImage(MultipartFile file, Authentication auth) throws IOException {
         log.info("New avatar {}", file.getName());
-        User user = findAuthUser();
+        User user = userRepository.findUserByEmail(auth.getName())
+                .orElseThrow(UserNotFoundException::new);
         Image newImage;
 
         if (userRepository.findUserByEmailIgnoreCase(user.getUsername()).get().getImage() == null) {
             newImage = imageService.saveImage(file);
         } else {
-            newImage = imageService.updateImage(file, Integer.parseInt(user.getImage()));
+            newImage = imageService.updateImage(auth.getName(), file, Integer.parseInt(user.getImage()));
         }
         user.setImage(newImage.getId());
         userRepository.save(user);
-    }
-
-    @Override
-    public User findAuthUser() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        String username;
-
-        if (user != null) {
-            username = ((UserDetails) user).getUsername();
-        } else {
-            username = user.toString();
-        }
-        return userRepository.findUserByEmailIgnoreCase(username).orElseThrow(() ->
-                new UsernameNotFoundException("User doesn't exist"));
     }
 }

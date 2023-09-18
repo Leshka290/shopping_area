@@ -38,10 +38,10 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPasswordDto newPasswordDto, Authentication auth) {
         log.info("Request update password");
 
-        return ResponseEntity.ok().body(userService.setPassword(newPasswordDto));
+        return ResponseEntity.ok().body(userService.setPassword(newPasswordDto, auth));
     }
 
     @Operation(summary = "Получение информации об авторизованном пользователе")
@@ -63,9 +63,9 @@ public class UserController {
                     schema = @Schema(implementation = UpdateUserDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto userDto) {
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto userDto, Authentication auth) {
         log.info("Update info user");
-        userService.updateUser(userDto);
+        userService.updateUser(userDto, auth);
         return ResponseEntity.ok().body(userDto);
     }
 
@@ -76,9 +76,9 @@ public class UserController {
     @ApiResponse(responseCode = "204", description = "No Content")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image) throws IOException {
+    public ResponseEntity<Void> updateUserImage(@RequestBody MultipartFile image, Authentication auth) throws IOException {
         log.info("Update image by user");
-        userService.updateUserImage(image);
+        userService.updateUserImage(image, auth);
         return ResponseEntity.ok().build();
     }
 }

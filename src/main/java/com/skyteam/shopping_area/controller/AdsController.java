@@ -15,9 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @Slf4j
@@ -50,9 +52,10 @@ public class AdsController {
     )
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAds(@RequestPart CreateOrUpdateAdDto properties, @RequestPart MultipartFile image) {
+    public ResponseEntity<AdDto> addAds(@RequestPart CreateOrUpdateAdDto properties, @RequestPart MultipartFile image,
+                                        @NotNull Authentication auth) {
         log.info("New ads added {}", properties.getTitle());
-        return ResponseEntity.ok(adsService.addAds(properties, image));
+        return ResponseEntity.ok(adsService.addAds(properties, image, auth.getName()));
     }
 
     @Operation(summary = "Получение комментариев объявления")
@@ -71,9 +74,9 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeAds(@PathVariable int id) {
+    public ResponseEntity<?> removeAds(@NotNull Authentication auth, @PathVariable int id) {
         log.info("Remove ads id: {}", id);
-        adsService.removeAdsDto(id);
+        adsService.removeAdDto(auth.getName(), id);
         return ResponseEntity.noContent().build();
     }
 
@@ -85,9 +88,9 @@ public class AdsController {
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "403", description = "Forbidden")
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto createAdsDto) {
+    public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto createAdsDto, @NotNull Authentication auth) {
         log.info("Update ads id: {}", id);
-        return ResponseEntity.ok(adsService.updateAdsDto(id, createAdsDto));
+        return ResponseEntity.ok(adsService.updateAdDto(id, createAdsDto, auth.getName()));
     }
 
     @Operation(summary = "Получение объявлений авторизированного пользователя")
@@ -97,9 +100,9 @@ public class AdsController {
                     schema = @Schema(implementation = ResponseWrapperAdsDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAdsDto> getAdsMe() {
+    public ResponseEntity<ResponseWrapperAdsDto> getAdsMe(Authentication auth) {
         log.info("Get an ads from an authorized user");
-        return ResponseEntity.ok(adsService.getAllAdsMe());
+        return ResponseEntity.ok(adsService.getAllAdsMe(auth));
     }
 
     @Operation(summary = "Обновление картинки объявления",
@@ -109,9 +112,9 @@ public class AdsController {
                     @ApiResponse(responseCode = "404",
                             description = "Not Found")}, tags = "Image")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdsImage(@PathVariable int id, @RequestParam MultipartFile imageFile) throws IOException {
+    public ResponseEntity<?> updateAdsImage(@NotNull Authentication auth, @PathVariable int id, @RequestParam MultipartFile imageFile) throws IOException {
         log.info("Update image ags id: {}", id);
-        imageService.updateImage(imageFile, id);
+        imageService.updateImage(auth.getName(), imageFile, id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

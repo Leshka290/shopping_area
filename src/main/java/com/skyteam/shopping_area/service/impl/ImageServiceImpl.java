@@ -35,7 +35,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image updateImage(MultipartFile newImage, int idImage) throws IOException {
+    public Image updateImage(String email, MultipartFile newImage, int idImage) throws IOException {
         log.info("Current method is - updateImage");
 
         Image image = imageRepository.findById(idImage).orElseThrow(() -> new ImageNotFoundException("Image exception"));
