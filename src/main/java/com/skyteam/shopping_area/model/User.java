@@ -35,7 +35,9 @@ public class User {
 
     @Enumerated
     private Role role;
-    private String image;
+
+    @OneToOne
+    private Image image;
 
     public User(int id, String username, String email, String password,
                 Role role) {

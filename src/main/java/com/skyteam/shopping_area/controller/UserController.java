@@ -3,6 +3,7 @@ package com.skyteam.shopping_area.controller;
 import com.skyteam.shopping_area.dto.NewPasswordDto;
 import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
+import com.skyteam.shopping_area.service.ImageService;
 import com.skyteam.shopping_area.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,7 @@ import java.io.IOException;
 public class UserController {
 
     private final UserService userService;
+    private final ImageService imageService;
 
     @Operation(summary = "Обновление пароля")
     @ApiResponse(responseCode = "200", description = "OK")
@@ -81,4 +83,17 @@ public class UserController {
         userService.updateUserImage(image, auth);
         return ResponseEntity.ok().build();
     }
+
+//    @Operation(summary = "Получение аватара")
+//    @ApiResponse(responseCode = "200", description = "OK")
+//    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+//    @GetMapping(value = "/users/image/{id}", produces = {
+//            MediaType.IMAGE_PNG_VALUE,
+//            MediaType.IMAGE_JPEG_VALUE,
+//            MediaType.APPLICATION_OCTET_STREAM_VALUE,
+//            MediaType.IMAGE_GIF_VALUE
+//    })
+//    public ResponseEntity<?> getImage(@PathVariable("id") Integer id) {
+//        return ResponseEntity.ok(imageService.getImage(id));
+//    }
 }

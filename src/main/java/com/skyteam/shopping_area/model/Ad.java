@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Transient;
 
 import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -27,6 +28,7 @@ public class Ad {
     public static final String SEQUENCE_NAME = "ads_sequence";
 
     @Id
+    @GeneratedValue
     private int id;
 
     @ManyToOne
@@ -34,10 +36,11 @@ public class Ad {
 
     @OneToOne
     private Image image;
+    @PositiveOrZero
     private int price;
     private String title;
     private String description;
 
     @OneToMany
-    private Collection<Comment> comments = new ArrayList<>();
+    private Collection<Comment> comments;
 }

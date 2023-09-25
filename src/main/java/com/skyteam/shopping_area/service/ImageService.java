@@ -4,13 +4,12 @@ import com.skyteam.shopping_area.model.Image;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface ImageService {
 
-    Image saveImage(MultipartFile image) throws IOException;
+    void transferImageToResponse(Integer imageId, HttpServletResponse response) throws IOException;
 
-    byte[] getImage(int id);
-
-    Image updateImage(String email, MultipartFile image, int oldImage) throws IOException;
+    Image saveImageFile(MultipartFile imageFile) throws IOException;
 }
