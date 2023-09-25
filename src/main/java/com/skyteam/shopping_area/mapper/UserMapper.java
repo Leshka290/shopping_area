@@ -1,5 +1,6 @@
 package com.skyteam.shopping_area.mapper;
 
+import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.model.User;
 import org.mapstruct.Mapper;
@@ -11,4 +12,6 @@ public interface UserMapper {
 
     @Mapping(target = "image", expression = "java(user.getImage() != null ? user.getImage().getUrl() : \"\")")
     UserDto userToUserDto(User user);
+
+    UpdateUserDto userToUpdateUserDto(User user);
 }

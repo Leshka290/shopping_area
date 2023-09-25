@@ -1,6 +1,7 @@
 package com.skyteam.shopping_area.mapper;
 
 import com.skyteam.shopping_area.dto.AdDto;
+import com.skyteam.shopping_area.dto.CreateOrUpdateAdDto;
 import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import com.skyteam.shopping_area.model.Ad;
@@ -31,4 +32,8 @@ public interface AdsMapper {
     @Mapping(target = "image", expression = "java(ad.getImage() != null ? ad.getImage().getUrl() : \"\")")
     @Mapping(target = "pk", source = "id")
     ExtendedAdDto toFullAdsDto(Ad ad);
+
+    void updateAdsFromCreateAdsDto(CreateOrUpdateAdDto createOrUpdateAdDto, @MappingTarget Ad ad);
+
+    Ad adsDtoToAds(CreateOrUpdateAdDto createOrUpdateAdDto);
 }

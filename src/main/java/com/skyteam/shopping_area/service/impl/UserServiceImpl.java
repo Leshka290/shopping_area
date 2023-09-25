@@ -13,7 +13,6 @@ import com.skyteam.shopping_area.service.ImageService;
 import com.skyteam.shopping_area.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +35,6 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
 
-    private final ModelMapper modelMapper;
     private final UserMapper userMapper;
 
     @Override
@@ -87,7 +85,7 @@ public class UserServiceImpl implements UserService {
             user.setPhone(userDto.getPhone());
         }
         log.info(user.getUsername());
-        return modelMapper.map(userRepository.save(user), UpdateUserDto.class);
+        return userMapper.userToUpdateUserDto(userRepository.save(user));
     }
 
     @Override

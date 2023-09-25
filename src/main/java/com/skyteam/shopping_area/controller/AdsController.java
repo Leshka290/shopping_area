@@ -5,7 +5,6 @@ import com.skyteam.shopping_area.dto.CreateOrUpdateAdDto;
 import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import com.skyteam.shopping_area.service.AdsService;
-import com.skyteam.shopping_area.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -31,7 +29,6 @@ import java.io.IOException;
 public class AdsController {
 
     private final AdsService adsService;
-    private final ImageService imageService;
 
     @Operation(summary = "Получение всех объявлений")
     @ApiResponse(responseCode = "200", description = "OK",
@@ -66,8 +63,9 @@ public class AdsController {
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ExtendedAdDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @GetMapping(value ="/{id}")
+    @GetMapping( "/{id}")
     public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
+        log.info("Get info ads id: {}", id);
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
 
@@ -78,8 +76,10 @@ public class AdsController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeAds(@NotNull Authentication auth, @PathVariable int id) {
         log.info("Remove ads id: {}", id);
-        adsService.removeAdDto(auth.getName(), id);
-        return ResponseEntity.noContent().build();
+        if (adsService.removeAdDto(auth.getName(), id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @Operation(summary = "Обновление информации об объявлениях")
@@ -92,7 +92,11 @@ public class AdsController {
     @PatchMapping("/{id}")
     public ResponseEntity<AdDto> updateAds(@PathVariable int id, @RequestBody CreateOrUpdateAdDto createAdsDto, @NotNull Authentication auth) {
         log.info("Update ads id: {}", id);
-        return ResponseEntity.ok(adsService.updateAdDto(id, createAdsDto, auth.getName()));
+        AdDto adsDto = adsService.updateAdDto(id, createAdsDto, auth.getName());
+        if (adsDto != null) {
+            return ResponseEntity.ok(adsDto);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @Operation(summary = "Получение объявлений авторизированного пользователя")
@@ -104,7 +108,13 @@ public class AdsController {
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAdsDto> getAdsMe(Authentication auth) {
         log.info("Get an ads from an authorized user");
-        return ResponseEntity.ok(adsService.getAllAdsMe(auth));
+        ResponseWrapperAdsDto ads = adsService.getAllAdsMe(auth);
+        log.info(String.valueOf(ads));
+        if (ads != null) {
+            return ResponseEntity.ok(ads);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Operation(summary = "Обновление картинки объявления",
@@ -114,9 +124,14 @@ public class AdsController {
                     @ApiResponse(responseCode = "404",
                             description = "Not Found")}, tags = "Image")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdsImage(@NotNull Authentication auth, @PathVariable Integer id, @RequestParam MultipartFile imageFile) throws IOException {
+    public ResponseEntity<?> updateAdsImage(@NotNull Authentication auth,
+                                            @PathVariable Integer id,
+                                            @RequestParam MultipartFile imageFile) {
         log.info("Update image ags id: {}", id);
-        adsService.updateImage(id, imageFile, auth.getName());
-        return ResponseEntity.status(HttpStatus.OK).build();
+        if (adsService.updateImage(id, imageFile, auth.getName())) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

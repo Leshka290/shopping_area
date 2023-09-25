@@ -61,7 +61,7 @@ public class CommentController {
         if (commentService.deleteComments(adId, commentId, auth)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @Operation(summary = "Обновление комментария")

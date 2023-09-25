@@ -4,13 +4,11 @@ import com.skyteam.shopping_area.exception.ImageNotFoundException;
 import com.skyteam.shopping_area.model.Image;
 import com.skyteam.shopping_area.repository.ImageRepository;
 import com.skyteam.shopping_area.service.ImageService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;

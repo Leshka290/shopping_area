@@ -15,7 +15,7 @@ public interface AdsService {
 
     ExtendedAdDto getFullAds(int adsId);
 
-    void removeAdDto(String email, int adsId);
+    boolean removeAdDto(String email, int adsId);
 
     AdDto updateAdDto(int adsId, CreateOrUpdateAdDto createAdsDto, String email);
 
