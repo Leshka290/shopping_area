@@ -2,10 +2,10 @@ package com.skyteam.shopping_area.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.nio.file.Path;
 
 /**
  * Класс изображения пользователя для БД со свойствами:
@@ -20,6 +20,23 @@ import javax.persistence.Table;
 public class Image {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     private byte[] image;
+    private String name;
+    private String contentType;
+
+    private long size;
+    private String filePath;
+    private String mediaType;
+    private String fileExtension;
+
+    public Path getPath() {
+        return Path.of(this.filePath);
+    }
+
+    public String getUrl() {
+        return String.format("/%s/%s", getPath().getParent(), getId());
+    }
 }

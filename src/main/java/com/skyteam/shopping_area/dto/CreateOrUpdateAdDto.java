@@ -24,6 +24,4 @@ public class CreateOrUpdateAdDto {
     private int price;
     @Schema(description = "заголовок объявления", minLength = 4, maxLength = 32)
     private String title;
-    @Schema(description = "айди автора", minimum = "0", maximum= "100000000")
-    private Integer authorId;
 }

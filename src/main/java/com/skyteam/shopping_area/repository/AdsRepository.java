@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AdsRepository extends JpaRepository<Ad, Integer> {
 
-    List<Ad> findByAuthorId(String authenticatedUserId);
+    List<Ad> findByAuthor_Email(String email);
 }

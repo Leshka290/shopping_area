@@ -5,8 +5,8 @@ import com.skyteam.shopping_area.dto.CreateOrUpdateAdDto;
 import com.skyteam.shopping_area.dto.ExtendedAdDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperAdsDto;
 import com.skyteam.shopping_area.exception.AdNotFoundException;
-import com.skyteam.shopping_area.exception.ImageNotFoundException;
 import com.skyteam.shopping_area.exception.UserNotFoundException;
+import com.skyteam.shopping_area.mapper.AdsMapper;
 import com.skyteam.shopping_area.model.Ad;
 import com.skyteam.shopping_area.model.Image;
 import com.skyteam.shopping_area.model.User;
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Реализует CRUD операции класса Ads
@@ -42,13 +43,24 @@ public class AdsServiceImpl implements AdsService {
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final AdsMapper adsMapper;
     private final CheckRoleUserService checkRoleUserService;
     private final ImageService imageService;
 
     @Override
     public ResponseWrapperAdsDto getAllAds() {
         log.info("Current method is - getAllAds");
-        return modelMapper.map(adsRepository.findAll(), ResponseWrapperAdsDto.class);
+
+        List<Ad> adsList = adsRepository.findAll();
+        log.info(adsList.toString());
+        return adsMapper.listAdsToAdsDto(adsList.size(), adsList);
+
+//        List<Ad> adsList = adsRepository.findAll();
+//        ResponseWrapperAdsDto adsDto = new ResponseWrapperAdsDto();
+//        adsDto.setCount((int) adsRepository.count());
+//        AdDto adDto = new AdDto();
+//        return adsDto;
+//        return modelMapper.map(adsRepository.findAll(), ResponseWrapperAdsDto.class);
     }
 
     @Override
@@ -57,25 +69,29 @@ public class AdsServiceImpl implements AdsService {
         Ad saveAd = modelMapper.map(properties, Ad.class);
         saveAd.setAuthor(userRepository.findUserByEmail(email).orElseThrow(UserNotFoundException::new));
         Image image;
-        if (imageFile != null) {
             try {
-                image = imageService.saveImage(imageFile);
+                image = imageService.saveImageFile(imageFile);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            saveAd.setImage(image);
-            adsRepository.save(saveAd);
-            return modelMapper.map(saveAd, AdDto.class);
-        } else {
-            throw new ImageNotFoundException("Картинка не найдена");
-        }
+//            saveAd.setImage(image);
+//            adsRepository.save(saveAd);
+//            AdDto adDto = new AdDto();
+//            adDto.setPrice(saveAd.getPrice());
+//            adDto.setAuthor(saveAd.getAuthor().getId());
+//            adDto.setTitle(saveAd.getTitle());
+//            adDto.setImage(saveAd.getImage());
+//            return adDto;
+        saveAd.setImage(image);
+        adsRepository.saveAndFlush(saveAd);
+        return adsMapper.adsToAdsDto(saveAd);
     }
 
     @Override
     public ExtendedAdDto getFullAds(int id) {
         Ad ad = adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
         log.info(String.valueOf(ad));
-        return modelMapper.map(ad, ExtendedAdDto.class);
+        return adsMapper.toFullAdsDto(ad);
     }
 
     @Override
@@ -115,8 +131,8 @@ public class AdsServiceImpl implements AdsService {
         log.info("Current method is - getAllAdsMe");
         ResponseWrapperAdsDto responseWrapperAdsDto = new ResponseWrapperAdsDto();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String authenticatedUsername = authentication.getName();
-        List<Ad> ads = adsRepository.findByAuthorId(authenticatedUsername);
+        String authenticatedUserEmail = authentication.getName();
+        List<Ad> ads = adsRepository.findByAuthor_Email(authenticatedUserEmail);
         List<AdDto> adDtos = new ArrayList<>();
         for (Ad ad : ads) {
             AdDto adDto = new AdDto();
@@ -126,5 +142,24 @@ public class AdsServiceImpl implements AdsService {
             responseWrapperAdsDto.setResults(adDtos);
         }
         return responseWrapperAdsDto;
+    }
+
+    @Override
+    public boolean updateImage(int id, MultipartFile imageFile, String email) {
+        log.info("запустился метод updateImage.");
+        Ad ad = adsRepository.findById(id).orElseThrow(AdNotFoundException::new);
+        User adOwner = ad.getAuthor();
+        if (checkRoleUserService.isUserOrAdmin(email, adOwner)) {
+            Image image;
+            try {
+                image = imageService.saveImageFile(imageFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ad.setImage(image);
+            adsRepository.save(ad);
+            return true;
+        }
+        return false;
     }
 }

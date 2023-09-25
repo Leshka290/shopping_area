@@ -21,4 +21,6 @@ public interface AdsService {
 
     ResponseWrapperAdsDto getAllAdsMe(Authentication auth);
 
+    boolean updateImage(int id, MultipartFile imageFile, String email);
+
 }

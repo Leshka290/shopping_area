@@ -5,6 +5,7 @@ import com.skyteam.shopping_area.dto.UpdateUserDto;
 import com.skyteam.shopping_area.dto.UserDto;
 import com.skyteam.shopping_area.exception.InvalidPasswordException;
 import com.skyteam.shopping_area.exception.UserNotFoundException;
+import com.skyteam.shopping_area.mapper.UserMapper;
 import com.skyteam.shopping_area.model.Image;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.UserRepository;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     @Override
     public boolean setPassword(NewPasswordDto newPasswordDto, Authentication auth) {
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserByEmailIgnoreCase(auth.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
 
-        return modelMapper.map(user, UserDto.class);
+        return userMapper.userToUserDto(user);
     }
 
     @Override
@@ -89,18 +91,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserImage(MultipartFile file, Authentication auth) throws IOException {
+    public void updateUserImage(MultipartFile file, Authentication auth) {
         log.info("New avatar {}", file.getName());
         User user = userRepository.findUserByEmail(auth.getName())
                 .orElseThrow(UserNotFoundException::new);
         Image newImage;
 
-        if (userRepository.findUserByEmailIgnoreCase(user.getUsername()).get().getImage() == null) {
-            newImage = imageService.saveImage(file);
-        } else {
-            newImage = imageService.updateImage(auth.getName(), file, Integer.parseInt(user.getImage()));
+        try {
+            newImage = imageService.saveImageFile(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        user.setImage(newImage.getId());
+
+        user.setImage(newImage);
         userRepository.save(user);
     }
 }

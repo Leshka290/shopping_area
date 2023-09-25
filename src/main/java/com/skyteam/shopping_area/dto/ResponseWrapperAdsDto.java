@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Класс контейнер объявления со свойствами:
@@ -21,5 +21,5 @@ public class ResponseWrapperAdsDto {
 
     @Schema(description = "общее количество объявлений")
     private int count;
-    private Collection<AdDto> results;
+    private List<AdDto> results;
 }

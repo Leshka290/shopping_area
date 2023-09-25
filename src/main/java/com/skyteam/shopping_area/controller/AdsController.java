@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
@@ -36,12 +37,12 @@ public class AdsController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = ResponseWrapperAdsDto[].class)))
+                    schema = @Schema(implementation = ResponseWrapperAdsDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @GetMapping(value = "/")
+    @GetMapping()
     public ResponseEntity<?> getAds() {
         log.info("Request GET ads");
-        return ResponseEntity.ok().body(adsService.getAllAds());
+        return ResponseEntity.ok(adsService.getAllAds());
     }
 
     @Operation(summary = "Добавление объявления")
@@ -51,20 +52,21 @@ public class AdsController {
                     schema = @Schema(implementation = AdDto.class))
     )
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto> addAds(@RequestPart CreateOrUpdateAdDto properties, @RequestPart MultipartFile image,
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdDto> addAds(@RequestPart("properties") @Valid CreateOrUpdateAdDto properties,
+                                        @RequestBody @Valid MultipartFile image,
                                         @NotNull Authentication auth) {
         log.info("New ads added {}", properties.getTitle());
         return ResponseEntity.ok(adsService.addAds(properties, image, auth.getName()));
     }
 
-    @Operation(summary = "Получение комментариев объявления")
+    @Operation(summary = "Получение информации об объявлении")
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ExtendedAdDto.class)))
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    @GetMapping("/{id}")
+    @GetMapping(value ="/{id}")
     public ResponseEntity<ExtendedAdDto> getAds(@PathVariable int id) {
         return ResponseEntity.ok(adsService.getFullAds(id));
     }
@@ -112,9 +114,9 @@ public class AdsController {
                     @ApiResponse(responseCode = "404",
                             description = "Not Found")}, tags = "Image")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateAdsImage(@NotNull Authentication auth, @PathVariable int id, @RequestParam MultipartFile imageFile) throws IOException {
+    public ResponseEntity<?> updateAdsImage(@NotNull Authentication auth, @PathVariable Integer id, @RequestParam MultipartFile imageFile) throws IOException {
         log.info("Update image ags id: {}", id);
-        imageService.updateImage(auth.getName(), imageFile, id);
+        adsService.updateImage(id, imageFile, auth.getName());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
