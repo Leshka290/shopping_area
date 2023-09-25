@@ -4,6 +4,7 @@ import com.skyteam.shopping_area.dto.CommentDto;
 import com.skyteam.shopping_area.dto.ResponseWrapperCommentDto;
 import com.skyteam.shopping_area.exception.AdNotFoundException;
 import com.skyteam.shopping_area.exception.CommentNotFoundException;
+import com.skyteam.shopping_area.mapper.CommentMapper;
 import com.skyteam.shopping_area.model.Comment;
 import com.skyteam.shopping_area.model.User;
 import com.skyteam.shopping_area.repository.AdsRepository;
@@ -13,11 +14,11 @@ import com.skyteam.shopping_area.service.CheckRoleUserService;
 import com.skyteam.shopping_area.service.CommentService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,13 +34,14 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final AdsRepository adsRepository;
-    private final ModelMapper modelMapper;
     private final CheckRoleUserService checkRoleUserService;
+    private final CommentMapper commentMapper;
 
     @Override
     public CommentDto addComment(int id, CommentDto commentDto) {
 
-        User user = userRepository.findUserByEmailIgnoreCase(SecurityContextHolder.getContext()
+        User user = userRepository.findUserByEmailIgnoreCase(SecurityContextHolder
+                .getContext()
                 .getAuthentication()
                 .getName()).orElseThrow();
 
@@ -47,14 +49,15 @@ public class CommentServiceImpl implements CommentService {
         comment.setAuthor(user);
         comment.setAds(adsRepository.findById(id).orElseThrow());
         comment.setText(commentDto.getText());
-        return modelMapper.map(commentRepository.save(comment), CommentDto.class);
+        comment.setCreatedAt(LocalDateTime.now());
+        return commentMapper.commentToCommentDto(commentRepository.save(comment));
     }
 
     @Override
     public ResponseWrapperCommentDto getComments(int id) {
 
         List<Comment> commentList = commentRepository.findAllByAdsId(id);
-        return modelMapper.map(commentList, ResponseWrapperCommentDto.class);
+        return commentMapper.listCommentToCommentDto(commentList.size(), commentList);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
             comment.setText(commentDto.getText());
             commentRepository.save(comment);
             adsRepository.save(comment.getAds());
-            return modelMapper.map(comment, CommentDto.class);
+            return commentMapper.commentToCommentDto(comment);
         }
         return commentDto;
     }
