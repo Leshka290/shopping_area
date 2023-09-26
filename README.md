@@ -11,6 +11,12 @@
 - Просмотр объявлений и комментариев без авторизации
 - Просмотр, редактирование, удаление объявлений и комментариев с авторизацией
 
+## Демо проекта
+![home_page](src/main/resources/screenshots/home_page.png)
+![profile](src/main/resources/screenshots/profile.png)
+![product_page](src/main/resources/screenshots/product_page.png)
+![products_in_profile](src/main/resources/screenshots/products_in_profile.png)
+
 ## Используемые технологии
 <div>
   <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original-wordmark.svg" title="Java" alt="Java" width="40" height="40"/>&nbsp;
