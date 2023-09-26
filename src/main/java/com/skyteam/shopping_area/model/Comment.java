@@ -26,10 +26,10 @@ public class Comment {
     private int id;
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Ad ads;
 
     private LocalDateTime createdAt;

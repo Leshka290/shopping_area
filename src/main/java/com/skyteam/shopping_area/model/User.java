@@ -24,7 +24,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String username;
     private String email;
 
     @JsonIgnore
@@ -33,16 +32,15 @@ public class User {
     private String lastName;
     private String phone;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Image image;
 
-    public User(int id, String username, String email, String password,
+    public User(int id, String email, String password,
                 Role role) {
         this.id = id;
-        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;

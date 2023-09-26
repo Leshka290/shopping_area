@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
             throw new InvalidPasswordException("Current password is not valid");
         }
         changeUserPassword(user, newPasswordDto.getNewPassword());
-        log.info("Password " + user.getUsername() + " updated");
+        log.info("Password " + user.getEmail() + " updated");
         return true;
     }
 
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(Authentication auth) {
         User user = userRepository.findUserByEmailIgnoreCase(auth.getName()).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
-
+        log.info("Info user: " + userMapper.userToUserDto(user));
         return userMapper.userToUserDto(user);
     }
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
                 .findUserByEmail(auth.getName())
                 .orElseThrow(UserNotFoundException::new);
 
-        log.info(user.getUsername());
+        log.info(user.getEmail());
         if (userDto.getFirstName() != null && !userDto.getFirstName().isBlank()) {
             user.setFirstName(userDto.getFirstName());
         }
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         if (userDto.getPhone() != null && !userDto.getPhone().isBlank()) {
             user.setPhone(userDto.getPhone());
         }
-        log.info(user.getUsername());
+        log.info(user.getEmail());
         return userMapper.userToUpdateUserDto(userRepository.save(user));
     }
 

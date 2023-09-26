@@ -34,13 +34,13 @@ public class Ad {
     @ManyToOne
     private User author;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Image image;
     @PositiveOrZero
     private int price;
     private String title;
     private String description;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Collection<Comment> comments;
 }
