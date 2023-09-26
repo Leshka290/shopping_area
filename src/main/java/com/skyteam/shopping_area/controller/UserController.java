@@ -55,7 +55,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication auth) {
         log.info("Request GET info about authorize user");
-        return ResponseEntity.ok().body(userService.getUser(auth));
+        return ResponseEntity.ok(userService.getUser(auth));
     }
 
     @Operation(summary = "Обновление информации об авторизованном пользователе")
