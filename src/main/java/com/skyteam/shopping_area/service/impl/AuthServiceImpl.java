@@ -1,7 +1,6 @@
 package com.skyteam.shopping_area.service.impl;
 
 import com.skyteam.shopping_area.dto.RegisterDto;
-import com.skyteam.shopping_area.repository.UserRepository;
 import com.skyteam.shopping_area.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
