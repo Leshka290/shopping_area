@@ -9,6 +9,11 @@ import org.mapstruct.*;
 
 import java.util.List;
 
+/**
+ * Интерфейс для преобразования сущности объявления в дто и обратно
+ *
+ * @author leshka290
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface AdsMapper {
 
