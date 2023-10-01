@@ -2,6 +2,11 @@ package com.skyteam.shopping_area.service;
 
 import com.skyteam.shopping_area.model.User;
 
+/**
+ * Интерфейс для проверки пользователя
+ *
+ * @author leshka290
+ */
 public interface CheckRoleUserService {
 
     /**

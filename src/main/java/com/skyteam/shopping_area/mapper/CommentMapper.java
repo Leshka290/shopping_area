@@ -12,6 +12,11 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 
+/**
+ * Интерфейс для преобразования сущности комментария в дто и обратно
+ *
+ * @author leshka290
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface CommentMapper {
 

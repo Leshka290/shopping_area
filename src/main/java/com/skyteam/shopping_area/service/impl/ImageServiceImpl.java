@@ -71,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
         return saveImageDetails(imageFile, filePath);
     }
 
-    private Path createPathFromFile(MultipartFile imageFile) {
+    public Path createPathFromFile(MultipartFile imageFile) {
         Path path = Path.of(String.format("%s/%s", imageDir, imageFile.getOriginalFilename()));
         if (Files.exists(path)) {
             path = Path.of(String.format("%s/%s.%s", imageDir, generateFileName(),
@@ -80,18 +80,18 @@ public class ImageServiceImpl implements ImageService {
         return path;
     }
 
-    private String generateFileName() {
+    public String generateFileName() {
         int length = 8;
         boolean useLetters = true;
         boolean useNumbers = true;
         return RandomStringUtils.random(length, useLetters, useNumbers);
     }
 
-    private String getExtension(String fileName) {
+    public String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
-    private Image saveImageDetails(MultipartFile imageFile, Path filePath) {
+    public Image saveImageDetails(MultipartFile imageFile, Path filePath) {
         Image image = imageRepository.findByFilePath(filePath.toString()).orElse(new Image());
         image.setFilePath(filePath.toString());
         image.setFileExtension(getExtension(Objects.requireNonNull(imageFile.getOriginalFilename())));
